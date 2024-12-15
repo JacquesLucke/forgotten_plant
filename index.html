@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Forgotten Plant</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        border: 0;
+      }
+
+      body {
+        background-color: #7bad6d;
+      }
+
+      #container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+      }
+
+      #my_button {
+        padding: 1em;
+        font-size: 200%;
+        border-radius: 0.5em;
+        display: block;
+        transition: 50ms;
+      }
+
+      #my_button:hover {
+        border-radius: 1em;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="container">
+      <div>
+        <button id="my_button">Start 3s Counter</button>
+      </div>
+    </div>
+    <div id="log"></div>
+    <script>
+      async function main() {
+        const supportsNotifications = "Notification" in window;
+        if (!supportsNotifications) {
+          log("Notification is not supported");
+          return;
+        }
+        if (Notification.permission === "granted") {
+          log("Permission granted");
+          log("Waiting 3s to send notification, stay on this page!");
+          setTimeout(() => {
+            log("Sent!");
+            const messages = [
+              "Water or slauther.",
+              "Hydrate and vegetate.",
+              "Drink or shrink.",
+              "Green or mean.",
+              "Water now or they'll bow.",
+              "A drop or they flop.",
+              "Sprinkle or wrinkle.",
+              "Water them or watch them end.",
+              "Water to bloom, or face the doom.",
+              "Water or die, don't ask why.",
+            ];
+            const notification = new Notification("M A Y!", {
+              body: messages[Math.floor(Math.random() * messages.length)],
+              icon: "/plants.png",
+            });
+            notification.onclick = () => {
+              window.focus();
+              log("Clicked!");
+            };
+          }, 3000);
+          return;
+        }
+        if (Notification.permission === "denied") {
+          log("Permission denied");
+          return;
+        }
+        log("Requesting permission");
+        const permission = await Notification.requestPermission();
+        if (permission === "granted") {
+          log("Permission granted");
+        }
+      }
+
+      function log(message) {
+        const p = document.createElement("p");
+        p.textContent = message;
+        document.getElementById("log").appendChild(p);
+      }
+
+      document.getElementById("my_button").addEventListener("click", main);
+    </script>
+  </body>
+</html>
